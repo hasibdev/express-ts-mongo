@@ -12,7 +12,7 @@ npm-debug.log*
 
 # Documentation
 docs
-
+dist
 # Runtime data
 pids
 *.pid
