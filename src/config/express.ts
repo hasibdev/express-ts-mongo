@@ -2,7 +2,7 @@ import morgan from 'morgan'
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
-// import apiRoutes from '../routes/api'
+import routes from '../routes'
 
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpecs } from './swagger'
@@ -19,6 +19,6 @@ app.use(helmet())
 app.use(cors())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
-// app.use('/api', apiRoutes)
+app.use('/api', routes)
 
-export { app }
+export default app
