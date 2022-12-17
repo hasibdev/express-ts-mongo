@@ -1,20 +1,24 @@
 import { Request, Response } from 'express'
 import User from "../models/User"
 import paginated from "../utils/pagination"
+import bcrypt from "bcrypt"
+import jwt from 'jsonwebtoken'
 
+import vars from '../config/vars'
 
 /**
  * Get List of Data
  * @route GET api/users
+ * @return User[]
  */
 const index = async (req: Request, res: Response) => {
   try {
     const { limit, skip, meta } = await paginated(User, req)
 
     const data = await User.find().limit(limit).skip(skip).select(['-password'])
-    res.json({ data, meta })
+    return res.json({ data, meta })
   } catch (error) {
-    res.status(500).json({ error })
+    return res.status(500).json({ error })
   }
 }
 
@@ -28,31 +32,33 @@ const show = async (req: Request, res: Response) => {
     if (!data) {
       return res.status(404).json({ message: 'User not found!' })
     }
-    res.json({ data })
+    return res.json({ data })
   } catch (error) {
-    res.status(500).json({ error })
+    return res.status(500).json({ error })
   }
 }
 
 /**
  * Create new Data
  * @route POST api/users
+ * @return User with token
  */
 const create = async (req: Request, res: Response) => {
 
   const { firstName, lastName, email, password, phone } = req.body
   try {
     const user = await User.create({ firstName, lastName, email, password, phone })
-    const data = await User.findById(user.id).select('-password')
-    res.json({ user: data })
+    const { password: pass, ...others } = user.toJSON()
+    return res.json({ user: others })
   } catch (error) {
-    res.status(500).json({ error })
+    return res.status(500).json({ error })
   }
 }
 
 /**
  * Update Data
  * @route PUT api/users/:id
+ * @return User
  */
 const update = async (req: Request, res: Response) => {
 
@@ -65,15 +71,16 @@ const update = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found!' })
     }
 
-    res.json({ data: await User.findById(id) })
+    return res.json({ data: await User.findById(id) })
   } catch (error) {
-    res.status(500).json({ error })
+    return res.status(500).json({ error })
   }
 }
 
 /**
  * Delete Data
  * @route DELETE api/users/:id
+ * @return null
  */
 const destroy = async (req: Request, res: Response) => {
   try {
@@ -83,10 +90,42 @@ const destroy = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found!' })
     }
 
-    res.json({ message: 'Deleted Successfully!' })
+    return res.json({ message: 'Deleted Successfully!' })
   } catch (error) {
-    res.status(500).json({ error })
+    return res.status(500).json({ error })
   }
 }
 
-export default { index, show, create, update, destroy }
+/**
+ * Login User
+ * @route POST api/users/login
+ * @return User with token
+ */
+
+const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body
+
+
+  const user = await User.findOne({ email })
+
+  if (!user) return res.status(400).json({ message: 'User Not found!' })
+
+  const checkPassword = await bcrypt.compare(password, user.password)
+  const jwtSecret = vars.jwtSecret
+
+  if (!checkPassword) {
+    return res.status(401).json({ message: 'Invalid Email or Password' })
+  }
+
+  const { password: pass, ...others } = user.toJSON()
+
+  jwt.sign({ user }, jwtSecret, { expiresIn: '1d' }, (err: any, token: any) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error in JWT token generation' })
+    }
+    return res.json({ token, user: others })
+  })
+
+}
+
+export default { index, show, create, update, destroy, login }

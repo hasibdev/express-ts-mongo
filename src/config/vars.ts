@@ -6,7 +6,7 @@ const mongoURL = process.env.NODE_ENV === 'test' ? process.env.MONGO_URI_TESTS :
 export default {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
-  jwtSecret: process.env.JWT_SECRET,
+  jwtSecret: process.env.JWT_SECRET || 'abcd123456efg78910',
   jwtExpirationInterval: process.env.JWT_EXPIRATION_MINUTES,
   mongo: {
     uri: mongoURL || '',

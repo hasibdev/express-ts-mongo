@@ -17,3 +17,7 @@ export const createUserSchema = object().shape({
   phone: string().nullable()
 })
 
+export const userLoginSchema = object().shape({
+  email: string().email().required(),
+  password: string().required()
+})
