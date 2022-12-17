@@ -16,3 +16,4 @@ export const createUserSchema = object().shape({
   password: string().required().min(6).max(180),
   phone: string().nullable()
 })
+

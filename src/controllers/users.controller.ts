@@ -11,7 +11,7 @@ const index = async (req: Request, res: Response) => {
   try {
     const { limit, skip, meta } = await paginated(User, req)
 
-    const data = await User.find().limit(limit).skip(skip)
+    const data = await User.find().limit(limit).skip(skip).select(['-password'])
     res.json({ data, meta })
   } catch (error) {
     res.status(500).json({ error })
