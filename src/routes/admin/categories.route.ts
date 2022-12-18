@@ -3,7 +3,7 @@ import { bodyValidation, uidValidation } from '../../middlewares/validations'
 import categoriesController from '../../controllers/admin/categories.controller'
 import { createCategorySchema } from '../../validators/categories.validator'
 
-const router = express.Router({ mergeParams: true })
+const router = express.Router()
 
 router.get('/', categoriesController.index)
 router.post('/', bodyValidation(createCategorySchema), categoriesController.create)
