@@ -1,5 +1,5 @@
 import express from 'express'
-import usersController from '../../controllers/users.controller'
+import usersController from '../../controllers/admin/users.controller'
 import { bodyValidation, uidValidation } from '../../middlewares/validations'
 import { createUserSchema, userLoginSchema } from '../../validators/user.validator'
 

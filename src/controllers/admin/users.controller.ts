@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import User from "../models/User"
-import paginated from "../utils/pagination"
+import User from "../../models/User"
+import paginated from "../../utils/pagination"
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 
-import vars from '../config/vars'
+import vars from '../../config/vars'
 
 /**
  * Get List of Data
