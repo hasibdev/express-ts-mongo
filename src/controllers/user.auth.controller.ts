@@ -35,19 +35,6 @@ const login = async (req: Request, res: Response) => {
       return res.status(500).json({ message: 'Error in JWT token generation' })
     }
 
-    const url = `http://localhost:6000/api/user/verify-email?token=${token}`
-    sendEmailVarification({
-      to: user.email,
-      subject: 'Email Varification',
-      text: "Please verify your email address",
-      html: `
-        <div>
-          <p>Please verify your email address</p>          
-          <a href="${url}" target="_blank">Click Here</a>
-        </div>
-      `
-    })
-
     return res.json({ access_token: token, user: others })
   })
 
@@ -69,6 +56,9 @@ const signup = async (req: Request, res: Response) => {
       if (err) {
         return res.status(500).json({ message: 'Error in JWT token generation' })
       }
+
+
+      sendEmailVarification({ to: user.email, token })
 
       return res.json({ access_token: token, user: others })
     })
