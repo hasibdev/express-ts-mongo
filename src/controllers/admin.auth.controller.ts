@@ -37,21 +37,6 @@ const login = async (req: Request, res: Response) => {
   })
 
 }
-/**
- * Create new Data
- * @route POST api/users
- * @return Admin with token
- */
-const signup = async (req: Request, res: Response) => {
 
-  const { firstName, lastName, email, password, phone } = req.body
-  try {
-    const user = await Admin.create({ firstName, lastName, email, password, phone })
-    const { password: pass, ...others } = user.toJSON()
-    return res.json({ user: others })
-  } catch (error) {
-    return res.status(500).json({ error })
-  }
-}
 
-export default { login, signup }
+export default { login }

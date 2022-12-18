@@ -1,7 +1,12 @@
 import { object, string, ValidationError } from 'yup'
 import User from '../models/User'
 
-export const createUserSchema = object().shape({
+export const userLoginSchema = object().shape({
+  email: string().email().required(),
+  password: string().required()
+})
+
+export const userSignupSchema = object().shape({
   firstName: string().required(),
   lastName: string().required(),
   email: string().required().email().test(async (email) => {
@@ -16,4 +21,3 @@ export const createUserSchema = object().shape({
   password: string().required().min(6).max(180),
   phone: string().nullable()
 })
-

@@ -1,6 +1,6 @@
 import express from 'express'
 import { bodyValidation } from '../../middlewares/validations'
-import { userLoginSchema, userSignupSchema } from '../../validators/user.validator'
+import { userLoginSchema, userSignupSchema } from '../../validators/user.auth.validator'
 import userAuthController from '../../controllers/user.auth.controller'
 
 const router = express.Router()
