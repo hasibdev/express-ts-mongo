@@ -4,6 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 
 import vars from '../config/vars'
+import { sendEmailVarification } from '../services/mail.services'
 
 
 /**
@@ -29,10 +30,24 @@ const login = async (req: Request, res: Response) => {
 
   const { password: pass, ...others } = user.toJSON()
 
-  jwt.sign({ user }, jwtSecret, { expiresIn: '1d' }, (err: any, token: any) => {
+  jwt.sign({ user: user.id }, jwtSecret, { expiresIn: '1d' }, async (err: any, token: any) => {
     if (err) {
       return res.status(500).json({ message: 'Error in JWT token generation' })
     }
+
+    const url = `http://localhost:6000/api/user/verify-email?token=${token}`
+    sendEmailVarification({
+      to: user.email,
+      subject: 'Email Varification',
+      text: "Please verify your email address",
+      html: `
+        <div>
+          <p>Please verify your email address</p>          
+          <a href="${url}" target="_blank">Click Here</a>
+        </div>
+      `
+    })
+
     return res.json({ access_token: token, user: others })
   })
 
@@ -50,10 +65,11 @@ const signup = async (req: Request, res: Response) => {
     const { password: pass, ...others } = user.toJSON()
 
     const jwtSecret = vars.jwtSecret
-    jwt.sign({ user }, jwtSecret, { expiresIn: '1d' }, (err: any, token: any) => {
+    jwt.sign({ user: user.id }, jwtSecret, { expiresIn: '1d' }, (err: any, token: any) => {
       if (err) {
         return res.status(500).json({ message: 'Error in JWT token generation' })
       }
+
       return res.json({ access_token: token, user: others })
     })
 
@@ -62,4 +78,8 @@ const signup = async (req: Request, res: Response) => {
   }
 }
 
-export default { login, signup }
+const verifyEmail = async (req: Request, res: Response) => {
+  return res.send('Hello')
+}
+
+export default { login, signup, verifyEmail }

@@ -8,5 +8,6 @@ const router = express.Router()
 
 router.post('/login', bodyValidation(userLoginSchema), userAuthController.login)
 router.post('/signup', bodyValidation(userSignupSchema), userAuthController.signup)
+router.get('/verify-email', userAuthController.verifyEmail)
 
 export default router

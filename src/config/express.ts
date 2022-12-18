@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(morgan(vars.logs))
 app.use(helmet())
+
 app.use(cors())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
