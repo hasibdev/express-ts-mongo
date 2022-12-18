@@ -1,4 +1,4 @@
-import { object, string, ValidationError } from 'yup'
+import { object, string, ValidationError, ref } from 'yup'
 import User from '../models/User'
 
 export const userLoginSchema = object().shape({
@@ -18,6 +18,7 @@ export const userSignupSchema = object().shape({
       return Promise.reject(error)
     }
   }),
+  phone: string().nullable(),
   password: string().required().min(6).max(180),
-  phone: string().nullable()
+  repeat_password: string().required().oneOf([ref('password')], 'Your passwords do not match.'),
 })
