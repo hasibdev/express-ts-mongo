@@ -33,7 +33,7 @@ const login = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({ message: 'Error in JWT token generation' })
     }
-    return res.json({ token, user: others })
+    return res.json({ access_token: token, user: others })
   })
 
 }
@@ -48,7 +48,15 @@ const signup = async (req: Request, res: Response) => {
   try {
     const user = await User.create({ firstName, lastName, email, password, phone })
     const { password: pass, ...others } = user.toJSON()
-    return res.json({ user: others })
+
+    const jwtSecret = vars.jwtSecret
+    jwt.sign({ user }, jwtSecret, { expiresIn: '1d' }, (err: any, token: any) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error in JWT token generation' })
+      }
+      return res.json({ access_token: token, user: others })
+    })
+
   } catch (error) {
     return res.status(500).json({ error })
   }
