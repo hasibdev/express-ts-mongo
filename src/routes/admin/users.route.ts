@@ -10,6 +10,5 @@ router.post('/', bodyValidation(createUserSchema), usersController.create)
 router.get('/:id', uidValidation('id'), usersController.show)
 router.put('/id', uidValidation('id'), usersController.update)
 router.delete('/id', uidValidation('id'), usersController.destroy)
-router.post('/login', bodyValidation(userLoginSchema), usersController.login)
 
 export default router

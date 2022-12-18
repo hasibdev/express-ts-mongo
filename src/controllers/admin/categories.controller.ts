@@ -1,21 +1,17 @@
 import { Request, Response } from 'express'
-import User from "../../models/User"
+import Category from "../../models/Category"
 import paginated from "../../utils/pagination"
-import bcrypt from "bcrypt"
-import jwt from 'jsonwebtoken'
-
-import vars from '../../config/vars'
 
 /**
  * Get List of Data
  * @route GET api/users
- * @return User[]
+ * @return Category[]
  */
 const index = async (req: Request, res: Response) => {
   try {
-    const { limit, skip, meta } = await paginated(User, req)
+    const { limit, skip, meta } = await paginated(Category, req)
 
-    const data = await User.find().limit(limit).skip(skip).select(['-password'])
+    const data = await Category.find().limit(limit).skip(skip)
     return res.json({ data, meta })
   } catch (error) {
     return res.status(500).json({ error })
@@ -28,9 +24,9 @@ const index = async (req: Request, res: Response) => {
  */
 const show = async (req: Request, res: Response) => {
   try {
-    const data = await User.findById(req.params.id).select('-password')
+    const data = await Category.findById(req.params.id)
     if (!data) {
-      return res.status(404).json({ message: 'User not found!' })
+      return res.status(404).json({ message: 'Category not found!' })
     }
     return res.json({ data })
   } catch (error) {
@@ -41,15 +37,15 @@ const show = async (req: Request, res: Response) => {
 /**
  * Create new Data
  * @route POST api/users
- * @return User with token
+ * @return Category with token
  */
 const create = async (req: Request, res: Response) => {
 
-  const { firstName, lastName, email, password, phone } = req.body
+  const { name, description } = req.body
   try {
-    const user = await User.create({ firstName, lastName, email, password, phone })
-    const { password: pass, ...others } = user.toJSON()
-    return res.json({ user: others })
+    const data = await Category.create({ name, description })
+
+    return res.json({ data })
   } catch (error) {
     return res.status(500).json({ error })
   }
@@ -58,20 +54,20 @@ const create = async (req: Request, res: Response) => {
 /**
  * Update Data
  * @route PUT api/users/:id
- * @return User
+ * @return Category
  */
 const update = async (req: Request, res: Response) => {
 
-  const { firstName, lastName, email, phone } = req.body
+  const { name, description } = req.body
   const { id } = req.params
   try {
-    const data = await User.findByIdAndUpdate(id, { firstName, lastName, email, phone })
+    const data = await Category.findByIdAndUpdate(id, { name, description })
 
     if (!data) {
-      return res.status(404).json({ message: 'User not found!' })
+      return res.status(404).json({ message: 'Category not found!' })
     }
 
-    return res.json({ data: await User.findById(id) })
+    return res.json({ data: await Category.findById(id) })
   } catch (error) {
     return res.status(500).json({ error })
   }
@@ -84,10 +80,10 @@ const update = async (req: Request, res: Response) => {
  */
 const destroy = async (req: Request, res: Response) => {
   try {
-    const data = await User.findByIdAndDelete(req.params.id)
+    const data = await Category.findByIdAndDelete(req.params.id)
 
     if (!data) {
-      return res.status(404).json({ message: 'User not found!' })
+      return res.status(404).json({ message: 'Category not found!' })
     }
 
     return res.json({ message: 'Deleted Successfully!' })
@@ -95,6 +91,5 @@ const destroy = async (req: Request, res: Response) => {
     return res.status(500).json({ error })
   }
 }
-
 
 export default { index, show, create, update, destroy }
