@@ -44,31 +44,13 @@ rl.question('First Name: ', (firstName: string) => {
                   }
 
                   await Admin.create({ firstName, lastName, email, password })
-
+                  console.log("Admin Created Successfully!")
                } catch (error) {
                   console.error(error)
                } finally {
-                  return rl.close()
+                  rl.close()
+                  process.exit()
                }
-
-               // try {
-               //    const user = await Admin.findOne({ where: { email } })
-
-               //    if (user) {
-               //       console.log('E-mail already exits!')
-               //       console.log('Operation Fail!')
-               //       return rl.close()
-               //    }
-
-               //    const hashPassword = await bcrypt.hash(password, 10)
-
-               //    await Admin.create({ firstName, lastName, email, password: hashPassword })
-               //    console.log("Admin Created Successfully!")
-               // } catch (error) {
-               //    console.error(error)
-               // } finally {
-               //    rl.close()
-               // }
             })
          })
       })
