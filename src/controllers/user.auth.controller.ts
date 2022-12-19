@@ -17,7 +17,7 @@ const login = async (req: Request, res: Response) => {
   const { email, password } = req.body
 
 
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email }).select('+password')
 
   if (!user) return res.status(400).json({ message: 'User Not found!' })
 
@@ -35,7 +35,7 @@ const login = async (req: Request, res: Response) => {
       return res.status(500).json({ message: 'Error in JWT token generation' })
     }
 
-    return res.json({ access_token: token, user: others })
+    return res.json({ access_token: token, data: others })
   })
 
 }
@@ -60,7 +60,7 @@ const signup = async (req: Request, res: Response) => {
 
       sendEmailVarification({ to: user.email, token })
 
-      return res.status(201).json({ access_token: token, user: others })
+      return res.status(201).json({ access_token: token, data: others })
     })
 
   } catch (error) {

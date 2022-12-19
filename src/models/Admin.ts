@@ -27,7 +27,10 @@ const schema = new Schema({
   },
   password: {
     type: String,
-    required: [true, "Password is required"]
+    required: [true, "Password is required"],
+    minlength: 6,
+    maxlength: 128,
+    select: false
   },
   guard: {
     type: String,

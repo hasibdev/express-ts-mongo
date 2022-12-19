@@ -33,7 +33,7 @@ const login = async (req: Request, res: Response) => {
     if (err) {
       return res.status(500).json({ message: 'Error in JWT token generation' })
     }
-    return res.json({ token, user: others })
+    return res.json({ access_token: token, data: others })
   })
 
 }

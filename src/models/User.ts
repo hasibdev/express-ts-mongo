@@ -30,7 +30,8 @@ const schema = new Schema({
     type: String,
     required: true,
     minlength: 6,
-    maxlength: 128
+    maxlength: 128,
+    select: false
   },
   verified: {
     type: Boolean,

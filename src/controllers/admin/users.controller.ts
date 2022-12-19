@@ -11,7 +11,7 @@ const index = async (req: Request, res: Response) => {
   try {
     const { limit, skip, meta } = await paginated(User, req)
 
-    const data = await User.find().limit(limit).skip(skip).select(['-password'])
+    const data = await User.find().limit(limit).skip(skip)
     return res.json({ data, meta })
   } catch (error) {
     return res.status(500).json({ error })
@@ -24,7 +24,7 @@ const index = async (req: Request, res: Response) => {
  */
 const show = async (req: Request, res: Response) => {
   try {
-    const data = await User.findById(req.params.id).select('-password')
+    const data = await User.findById(req.params.id)
     if (!data) {
       return res.status(404).json({ message: 'User not found!' })
     }
