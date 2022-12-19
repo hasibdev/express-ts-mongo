@@ -6,6 +6,6 @@ import publicRoutes from './public'
 const router = express.Router()
 
 router.use('/', publicRoutes)
-router.use('/admin', adminRoutes)
-router.use('/user', userRoutes)
+  .use('/admin', adminRoutes)
+  .use('/user', userRoutes)
 export default router

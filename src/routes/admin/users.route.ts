@@ -5,10 +5,11 @@ import { createUserSchema } from '../../validators/user.validator'
 
 const router = express.Router()
 
-router.get('/', usersController.index)
-router.post('/', bodyValidation(createUserSchema), usersController.create)
-router.get('/:id', uidValidation('id'), usersController.show)
-router.put('/id', uidValidation('id'), usersController.update)
-router.delete('/id', uidValidation('id'), usersController.destroy)
+router
+  .get('/', usersController.index)
+  .post('/', bodyValidation(createUserSchema), usersController.create)
+  .get('/:id', uidValidation('id'), usersController.show)
+  .put('/id', uidValidation('id'), usersController.update)
+  .delete('/id', uidValidation('id'), usersController.destroy)
 
 export default router

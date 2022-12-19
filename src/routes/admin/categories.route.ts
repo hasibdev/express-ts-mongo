@@ -5,11 +5,12 @@ import { createCategorySchema } from '../../validators/categories.validator'
 
 const router = express.Router()
 
-router.get('/', categoriesController.index)
-router.post('/', bodyValidation(createCategorySchema), categoriesController.create)
-router.get('/:id', uidValidation('id'), categoriesController.show)
-router.put('/id', uidValidation('id'), categoriesController.update)
-router.delete('/id', uidValidation('id'), categoriesController.destroy)
+router
+  .get('/', categoriesController.index)
+  .post('/', bodyValidation(createCategorySchema), categoriesController.create)
+  .get('/:id', uidValidation('id'), categoriesController.show)
+  .put('/id', uidValidation('id'), categoriesController.update)
+  .delete('/id', uidValidation('id'), categoriesController.destroy)
 
 
 export default router

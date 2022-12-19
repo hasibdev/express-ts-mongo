@@ -9,10 +9,10 @@ import { bodyValidation } from '../../middlewares/validations'
 
 const router = express.Router()
 
-router.post('/login', bodyValidation(adminLoginSchema), adminAuthController.login)
-
-router.use('/users', users)
-router.use('/categories', categories)
-router.use('/products', products)
+router
+  .post('/login', bodyValidation(adminLoginSchema), adminAuthController.login)
+  .use('/users', users)
+  .use('/categories', categories)
+  .use('/products', products)
 
 export default router

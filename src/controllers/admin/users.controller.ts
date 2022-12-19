@@ -1,10 +1,6 @@
 import { Request, Response } from 'express'
 import User from "../../models/User"
 import paginated from "../../utils/pagination"
-import bcrypt from "bcrypt"
-import jwt from 'jsonwebtoken'
-
-import vars from '../../config/vars'
 
 /**
  * Get List of Data
@@ -16,7 +12,7 @@ const index = async (req: Request, res: Response) => {
     const { limit, skip, meta } = await paginated(User, req)
 
     const data = await User.find().limit(limit).skip(skip).select(['-password'])
-    return res.json({ test: 'Hello world', data, meta })
+    return res.json({ data, meta })
   } catch (error) {
     return res.status(500).json({ error })
   }
