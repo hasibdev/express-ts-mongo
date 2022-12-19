@@ -44,7 +44,9 @@ const schema = new Schema({
   guard: {
     type: String,
     default: 'users'
-  }
+  },
+  resetPassToken: String,
+  resetPassExpire: Date
 }, {
   timestamps: true
 })
