@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt'
 import { Schema, model, Model } from 'mongoose'
+import jwt from 'jsonwebtoken'
+import vars from '../config/vars'
 
 interface IUser {
   firstName: string
@@ -15,7 +17,8 @@ interface IUser {
 }
 
 interface IUserMethods {
-  matchPassword(password: string): Promise<boolean>
+  matchPassword(password: string): Promise<boolean>,
+  getsignedToken(): string
 }
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> { }
@@ -78,8 +81,12 @@ schema.pre('save', async function (next) {
   next()
 })
 
-schema.method('matchPassword', async function (password) {
+schema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
-})
+}
+
+schema.methods.getsignedToken = function () {
+  return jwt.sign({ id: this._id }, vars.jwtSecret, { expiresIn: '1d' })
+}
 
 export default model<IUser, UserModel>('User', schema)
