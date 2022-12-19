@@ -3,13 +3,13 @@ import Admin from "../models/Admin"
 
 /**
  * Login Admin
- * @route POST api/users/login
+ * @route POST api/admin/login
  * @return Admin with token
  */
 
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body
-  const user = await Admin.findOne({ email })
+  const user = await Admin.findOne({ email }).select('+password')
 
   if (!user) return res.status(400).json({ message: 'Admin Not found!' })
 
