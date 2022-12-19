@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express'
 import { HydratedDocument } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import vars from '../config/vars'
-import Admin, { AdminType } from '../models/Admin'
-import User, { UserType } from '../models/User'
+import Admin, { AdminModel } from '../models/Admin'
+import User, { UserModel } from '../models/User'
 
 type Guards = 'admins' | 'users'
 const guardsModel = {
@@ -32,7 +32,7 @@ export default function (...args: Guards[]) {
         return res.status(403).json({ message: 'You are not allowed!' })
       }
 
-      const user: UserType | AdminType | null = await User.findById(decoded.id)
+      const user: UserModel | AdminModel | null = await guardsModel[guard].findById(decoded.id)
 
       if (!user) {
         return res.status(401).json({ message: 'User not found with this token!' })

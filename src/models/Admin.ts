@@ -21,7 +21,7 @@ interface IUserMethods {
   getsignedToken(): string
 }
 
-interface AdminModel extends Model<IAdmin, {}, IUserMethods> { }
+export interface AdminModel extends Model<IAdmin, {}, IUserMethods> { }
 
 
 const schema = new Schema<IAdmin, AdminModel, IUserMethods>({
@@ -71,7 +71,7 @@ const schema = new Schema<IAdmin, AdminModel, IUserMethods>({
   resetPassExpire: Date
 })
 
-export type AdminType = InferSchemaType<typeof schema>
+// export type AdminType = InferSchemaType<typeof schema>
 
 schema.pre('save', async function (next) {
   if (this.isModified('password')) {

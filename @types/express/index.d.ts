@@ -1,12 +1,12 @@
 import { HydratedDocument } from 'mongoose'
 
-import { UserType } from "../../src/models/User"
-import { AdminType } from "../../src/models/Admin"
+import { UserModel } from "../../src/models/User"
+import { AdminModel } from "../../src/models/Admin"
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserType | AdminType | null
+      user?: UserModel | AdminModel
     }
   }
 }

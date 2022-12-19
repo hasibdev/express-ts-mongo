@@ -3,7 +3,7 @@ import { Schema, model, Model, InferSchemaType } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import vars from '../config/vars'
 
-interface IUser {
+export interface IUser {
   firstName: string
   lastName: string
   email: string
@@ -21,7 +21,7 @@ interface IUserMethods {
   getsignedToken(): string
 }
 
-interface UserModel extends Model<IUser, {}, IUserMethods> { }
+export interface UserModel extends Model<IUser, {}, IUserMethods> { }
 
 const schema = new Schema<IUser, UserModel, IUserMethods>({
   firstName: {
@@ -73,7 +73,7 @@ const schema = new Schema<IUser, UserModel, IUserMethods>({
   timestamps: true
 })
 
-export type UserType = InferSchemaType<typeof schema>
+// export type UserType = InferSchemaType<typeof schema>
 
 schema.pre('save', async function (next) {
   if (this.isModified('password')) {
