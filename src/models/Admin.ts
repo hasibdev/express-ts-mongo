@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
-import { Schema, model, Model } from 'mongoose'
+import { Schema, model, Model, InferSchemaType } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import vars from '../config/vars'
 
-interface IUser {
+interface IAdmin {
   firstName: string
   lastName: string
   email: string
@@ -21,10 +21,10 @@ interface IUserMethods {
   getsignedToken(): string
 }
 
-export interface UserModel extends Model<IUser, {}, IUserMethods> { }
+interface AdminModel extends Model<IAdmin, {}, IUserMethods> { }
 
 
-const schema = new Schema<IUser, UserModel, IUserMethods>({
+const schema = new Schema<IAdmin, AdminModel, IUserMethods>({
   firstName: {
     type: String,
     required: [true, "First Name is required"],
@@ -71,6 +71,8 @@ const schema = new Schema<IUser, UserModel, IUserMethods>({
   resetPassExpire: Date
 })
 
+export type AdminType = InferSchemaType<typeof schema>
+
 schema.pre('save', async function (next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10)
@@ -84,8 +86,12 @@ schema.method('matchPassword', async function (password) {
 })
 
 schema.methods.getsignedToken = function () {
-  return jwt.sign({ id: this._id }, vars.jwtSecret, { expiresIn: '1d' })
+  const payload = {
+    id: this._id,
+    guard: this.guard
+  }
+  return jwt.sign(payload, vars.jwtSecret, { expiresIn: '1d' })
 }
 
 
-export default model<IUser, UserModel>('Admin', schema)
+export default model<IAdmin, AdminModel>('Admin', schema)
