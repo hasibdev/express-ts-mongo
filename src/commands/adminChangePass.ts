@@ -36,13 +36,14 @@ rl.question('Email: ', (email: string) => {
 
          try {
             await mongoose.connect()
-            const user = await Admin.exists({ email })
+            const user = await Admin.findOne({ email })
             if (!user) {
                console.log('Admin Not found!')
                return rl.close()
             }
 
-            await Admin.updateOne({ email }, { password })
+            user.password = password
+            await user.save()
             console.log("Password changed Successfully!")
          } catch (error) {
             console.error(error)
