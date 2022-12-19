@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import User from "../models/User"
-import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 
 import vars from '../config/vars'
@@ -21,7 +20,7 @@ const login = async (req: Request, res: Response) => {
 
   if (!user) return res.status(400).json({ message: 'User Not found!' })
 
-  const checkPassword = await bcrypt.compare(password, user.password)
+  const checkPassword = await user.matchPassword(password)
   const jwtSecret = vars.jwtSecret
 
   if (!checkPassword) {
