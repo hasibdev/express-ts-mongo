@@ -45,7 +45,7 @@ const create = async (req: Request, res: Response) => {
   try {
     const user = await User.create({ firstName, lastName, email, password, phone })
     const { password: pass, ...others } = user.toJSON()
-    return res.json({ user: others })
+    return res.status(201).json({ user: others })
   } catch (error) {
     return res.status(500).json({ error })
   }

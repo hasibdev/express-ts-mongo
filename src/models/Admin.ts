@@ -4,24 +4,30 @@ import { Schema, model } from 'mongoose'
 const schema = new Schema({
   firstName: {
     type: String,
-    required: true
+    required: [true, "First Name is required"],
+    trim: true,
   },
   lastName: {
     type: String,
-    required: true
+    required: [true, "Last Name is required"],
+    trim: true,
   },
   email: {
     type: String,
-    required: true,
-    unique: true
+    required: [true, "Email is required"],
+    unique: true,
+    trim: true,
+    match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      'Please provice a valid email']
   },
   phone: {
     type: String,
+    trim: true,
     required: false,
   },
   password: {
     type: String,
-    required: true
+    required: [true, "Password is required"]
   },
   guard: {
     type: String,

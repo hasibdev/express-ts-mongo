@@ -60,7 +60,7 @@ const signup = async (req: Request, res: Response) => {
 
       sendEmailVarification({ to: user.email, token })
 
-      return res.json({ access_token: token, user: others })
+      return res.status(201).json({ access_token: token, user: others })
     })
 
   } catch (error) {

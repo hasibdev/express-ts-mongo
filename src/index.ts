@@ -13,4 +13,9 @@ mongoose.connect()
 server.on('listening', async function () {
   console.log(`Application running on http://localhost:${vars.port}`)
 })
-server.listen(vars.port)
+const listen = server.listen(vars.port)
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Logged Error: ', reason)
+  listen.close(() => process.exit(1))
+})

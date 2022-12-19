@@ -45,7 +45,7 @@ const create = async (req: Request, res: Response) => {
   try {
     const data = await Category.create({ name, description })
 
-    return res.json({ data })
+    return res.status(201).json({ data })
   } catch (error) {
     return res.status(500).json({ error })
   }
