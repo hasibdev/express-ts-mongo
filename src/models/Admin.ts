@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import { Schema, model, Model, InferSchemaType } from 'mongoose'
+import { Schema, model, Model } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import vars from '../config/vars'
 

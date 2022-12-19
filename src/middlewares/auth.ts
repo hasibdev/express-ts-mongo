@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { HydratedDocument } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import vars from '../config/vars'
 import Admin, { AdminModel } from '../models/Admin'
