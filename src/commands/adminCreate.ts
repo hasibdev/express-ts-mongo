@@ -1,6 +1,5 @@
 import Admin from '../models/Admin'
 import readline from 'readline'
-import bcrypt from "bcrypt"
 
 import mongoose from '../config/mongoose'
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
