@@ -4,6 +4,7 @@ import User from "../models/User"
 /**
  * Login User
  * @route POST api/user/login
+ * @access Public
  * @return User with token
  */
 
@@ -27,6 +28,7 @@ const login = async (req: Request, res: Response) => {
 /**
  * Create new Data
  * @route POST api/user/signup
+ * @access Public
  * @return User with token
  */
 const signup = async (req: Request, res: Response) => {
@@ -48,6 +50,7 @@ const signup = async (req: Request, res: Response) => {
 /**
  * Veriry Email
  * @route POST api/user/verify-email
+ * @access Public
  * @return User with token
  */
 const verifyEmail = async (req: Request, res: Response) => {

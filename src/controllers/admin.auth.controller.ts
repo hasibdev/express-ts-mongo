@@ -4,6 +4,7 @@ import Admin from "../models/Admin"
 /**
  * Login Admin
  * @route POST api/admin/login
+ * @access Public
  * @return Admin with token
  */
 

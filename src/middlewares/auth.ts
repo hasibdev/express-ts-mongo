@@ -10,10 +10,10 @@ const guardsModel = {
   users: User
 }
 
-export default function (...args: Guards[]) {
+export default (...args: Guards[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const guards = [...args]
-    const authHeader = req.headers['authorization']
+    const guards = [...args].length ? [...args] : ['users']
+    const authHeader = req.headers.authorization
 
     if (!authHeader) return res.status(401).json({ message: 'You are not authenticated!' })
 
@@ -22,7 +22,7 @@ export default function (...args: Guards[]) {
 
     jwt.verify(token, vars.jwtSecret, async (err: any, decoded: any) => {
       if (err) {
-        return res.status(401).json({ message: 'Invalid token!' })
+        return res.status(403).json({ message: 'Forbidden' })
       }
 
       const guard: Guards = decoded.guard
