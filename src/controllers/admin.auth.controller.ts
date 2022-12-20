@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import Admin from "../models/Admin"
+import jwt from 'jsonwebtoken'
+import vars from '../config/vars'
 
 /**
  * Login Admin
@@ -20,7 +22,7 @@ const login = async (req: Request, res: Response) => {
   }
 
   const refreshToken = user.getRefreshToken()
-  res.cookie('userjwt', refreshToken, {
+  res.cookie('adminjwt', refreshToken, {
     httpOnly: true,
     secure: false,
     sameSite: 'none',
@@ -34,5 +36,55 @@ const login = async (req: Request, res: Response) => {
   })
 }
 
+/**
+ * Refresh token
+ * @route POST api/user/refresh-token
+ * @access Public
+ * @return jwt token
+ */
+const generateRefreshToken = async (req: Request, res: Response) => {
+  const cookies = req.cookies
+  console.log(cookies)
 
-export default { login }
+  if (!cookies?.adminjwt) {
+    return res.status(401).json({ message: 'No Cookies' })
+  }
+
+  const token = cookies.adminjwt
+
+  jwt.verify(token, vars.refreshTokenSecret, async (err: any, decoded: any) => {
+    if (err) {
+      return res.status(403).json({ message: 'Jwt varify fail' })
+    }
+
+    const user = await Admin.findById(decoded.id)
+
+    if (!user) {
+      return res.status(401).json({ message: 'No User found' })
+    }
+
+    return res.json({
+      access_token: user.getAccessToken(),
+    })
+
+  })
+
+}
+
+/**
+ * Logout
+ * @route POST api/user/logout
+ * @access Public
+ * @return Deleted
+ */
+const logout = async (req: Request, res: Response) => {
+  const cookies = req.cookies
+  if (!cookies?.adminjwt) {
+    return res.status(204).json({ message: 'No Content' })
+  }
+
+  res.clearCookie('adminjwt', { httpOnly: true, sameSite: 'none', secure: true })
+  return res.json({ message: 'Cleared cookies' })
+}
+
+export default { login, logout, generateRefreshToken }

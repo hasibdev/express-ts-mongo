@@ -11,6 +11,8 @@ import auth from '../../middlewares/auth'
 const router = express.Router()
 
 router.post('/login', bodyValidation(adminLoginSchema), adminAuthController.login)
+router.post('/logout', adminAuthController.logout)
+router.post('/refresh-token', adminAuthController.generateRefreshToken)
 
 // Admin middleware
 router
