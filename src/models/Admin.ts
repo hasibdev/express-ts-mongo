@@ -17,8 +17,9 @@ interface IAdmin {
 }
 
 interface IUserMethods {
-  matchPassword(password: string): Promise<boolean>,
-  getsignedToken(): string
+  matchPassword(password: string): Promise<boolean>
+  getAccessToken(): string
+  getRefreshToken(): string
 }
 
 export interface AdminModel extends Model<IAdmin, {}, IUserMethods> { }
@@ -85,12 +86,19 @@ schema.method('matchPassword', async function (password) {
   return await bcrypt.compare(password, this.password)
 })
 
-schema.methods.getsignedToken = function () {
+schema.methods.getAccessToken = function () {
   const payload = {
     id: this._id,
     guard: this.guard
   }
-  return jwt.sign(payload, vars.jwtSecret, { expiresIn: '1d' })
+  return jwt.sign(payload, vars.accessTokenSecret, { expiresIn: '1m' })
+}
+schema.methods.getRefreshToken = function () {
+  const payload = {
+    id: this._id,
+    guard: this.guard
+  }
+  return jwt.sign(payload, vars.refreshTokenSecret, { expiresIn: '7d' })
 }
 
 

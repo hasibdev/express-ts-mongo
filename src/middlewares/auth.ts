@@ -20,7 +20,7 @@ export default (...args: Guards[]) => {
     let token = authHeader.startsWith('Bearer') ? authHeader.split(' ')[1] : authHeader
     if (!token) return res.status(401).json({ message: 'You are not allowed!' })
 
-    jwt.verify(token, vars.jwtSecret, async (err: any, decoded: any) => {
+    jwt.verify(token, vars.accessTokenSecret, async (err: any, decoded: any) => {
       if (err) {
         return res.status(403).json({ message: 'Forbidden' })
       }

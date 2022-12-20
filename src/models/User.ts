@@ -17,8 +17,9 @@ export interface IUser {
 }
 
 interface IUserMethods {
-  matchPassword(password: string): Promise<boolean>,
-  getsignedToken(): string
+  matchPassword(password: string): Promise<boolean>
+  getAccessToken(): string
+  getRefreshToken(): string
 }
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> { }
@@ -87,12 +88,21 @@ schema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
 
-schema.methods.getsignedToken = function () {
+schema.methods.getAccessToken = function () {
   const payload = {
     id: this._id,
     guard: this.guard
   }
-  return jwt.sign(payload, vars.jwtSecret, { expiresIn: '1d' })
+  return jwt.sign(payload, vars.accessTokenSecret, { expiresIn: '1m' })
 }
+schema.methods.getRefreshToken = function () {
+  const payload = {
+    id: this._id,
+    guard: this.guard
+  }
+  return jwt.sign(payload, vars.refreshTokenSecret, { expiresIn: '7d' })
+}
+
+
 
 export default model<IUser, UserModel>('User', schema)

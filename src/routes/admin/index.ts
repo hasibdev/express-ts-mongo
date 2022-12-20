@@ -10,10 +10,13 @@ import auth from '../../middlewares/auth'
 
 const router = express.Router()
 
+router.post('/login', bodyValidation(adminLoginSchema), adminAuthController.login)
+
+// Admin middleware
 router
-  .post('/login', bodyValidation(adminLoginSchema), adminAuthController.login)
-  .use('/users', auth('admins'), users)
-  .use('/categories', auth('admins'), categories)
-  .use('/products', auth('admins'), products)
+  .use(auth('admins'))
+  .use('/users', users)
+  .use('/categories', categories)
+  .use('/products', products)
 
 export default router

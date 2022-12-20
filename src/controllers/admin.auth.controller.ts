@@ -19,9 +19,17 @@ const login = async (req: Request, res: Response) => {
     return res.status(401).json({ message: 'Invalid Email or Password' })
   }
 
+  const refreshToken = user.getRefreshToken()
+  res.cookie('userjwt', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  })
+
   const { password: pass, ...others } = user.toJSON()
   return res.status(201).json({
-    access_token: user.getsignedToken(),
+    access_token: user.getAccessToken(),
     data: others
   })
 }

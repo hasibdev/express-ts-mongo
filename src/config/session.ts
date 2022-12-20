@@ -6,7 +6,7 @@ const MongoDBSession = ConnectMongoDBSession(session)
 
 const sessionStore = new MongoDBSession({
   uri: vars.mongo.uri,
-  collection: 'mySessions'
+  collection: 'api_tokens'
 })
 // Catch errors
 sessionStore.on('error', function (error) {
