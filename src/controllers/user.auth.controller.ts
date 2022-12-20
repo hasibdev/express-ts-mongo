@@ -24,7 +24,7 @@ const login = async (req: Request, res: Response) => {
 
   res.cookie('userjwt', refreshToken, {
     httpOnly: true,
-    secure: true,
+    secure: false,
     sameSite: 'none',
     maxAge: 7 * 24 * 60 * 60 * 1000
   })
@@ -51,7 +51,7 @@ const signup = async (req: Request, res: Response) => {
     const refreshToken = user.getRefreshToken()
     res.cookie('userjwt', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
@@ -84,21 +84,23 @@ const verifyEmail = async (req: Request, res: Response) => {
  */
 const generateRefreshToken = async (req: Request, res: Response) => {
   const cookies = req.cookies
+  console.log(cookies)
+
   if (!cookies?.userjwt) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ message: 'No Cookies' })
   }
 
   const token = cookies.userjwt
 
   jwt.verify(token, vars.refreshTokenSecret, async (err: any, decoded: any) => {
     if (err) {
-      return res.status(403).json({ message: 'Forbidden' })
+      return res.status(403).json({ message: 'Jwt varify fail' })
     }
 
     const user = await User.findById(decoded.id)
 
     if (!user) {
-      return res.status(401).json({ message: 'Unauthorized' })
+      return res.status(401).json({ message: 'No User found' })
     }
 
     return res.json({

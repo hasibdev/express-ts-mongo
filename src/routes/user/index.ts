@@ -10,5 +10,6 @@ router
   .post('/login', bodyValidation(userLoginSchema), userAuthController.login)
   .post('/signup', bodyValidation(userSignupSchema), userAuthController.signup)
   .get('/verify-email', userAuthController.verifyEmail)
+  .get('/refresh-token', userAuthController.generateRefreshToken)
 
 export default router

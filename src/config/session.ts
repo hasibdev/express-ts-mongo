@@ -1,22 +1,22 @@
-import session from 'express-session'
-import ConnectMongoDBSession from 'connect-mongodb-session'
-import vars from './vars'
+// import session from 'express-session'
+// import ConnectMongoDBSession from 'connect-mongodb-session'
+// import vars from './vars'
 
-const MongoDBSession = ConnectMongoDBSession(session)
+// const MongoDBSession = ConnectMongoDBSession(session)
 
-const sessionStore = new MongoDBSession({
-  uri: vars.mongo.uri,
-  collection: 'api_tokens'
-})
-// Catch errors
-sessionStore.on('error', function (error) {
-  console.log(error)
-})
+// const sessionStore = new MongoDBSession({
+//   uri: vars.mongo.uri,
+//   collection: 'api_tokens'
+// })
+// // Catch errors
+// sessionStore.on('error', function (error) {
+//   console.log(error)
+// })
 
-export const expressSession = session({
-  secret: 'session-secret',
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore
-})
+// export const expressSession = session({
+//   secret: 'session-secret',
+//   resave: false,
+//   saveUninitialized: false,
+//   store: sessionStore
+// })
 

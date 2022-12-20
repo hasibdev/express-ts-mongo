@@ -5,7 +5,8 @@ import cors from './cors'
 import routes from '../routes'
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpecs } from './swagger'
-import { expressSession } from './session'
+// import { expressSession } from './session'
+import cookieParser from 'cookie-parser'
 import path from 'path'
 import { notFound } from '../controllers/http/http.controller'
 import morgan from './morgan'
@@ -17,7 +18,8 @@ app
   .use(express.urlencoded({ extended: true }))
   .use(morgan)
   .use(cors)
-  .use(expressSession)
+  .use(cookieParser())
+  // .use(expressSession)
   .use(helmet())
   .use('/', express.static(path.join(__dirname, 'public')))
   .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs))
