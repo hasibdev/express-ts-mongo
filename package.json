@@ -8,7 +8,9 @@
     "dev": "nodemon --config src/config/nodemon.json src/index.ts",
     "build": "tsc",
     "admin:create": "ts-node src/commands/adminCreate.ts",
-    "admin:changePass": "ts-node src/commands/adminChangePass.ts"
+    "admin:changePass": "ts-node src/commands/adminChangePass.ts",
+    "deploy": "pm2 start npm --name mernapi -- start",
+    "reload": "pm2 reload mernapi"
   },
   "keywords": [],
   "author": "",
